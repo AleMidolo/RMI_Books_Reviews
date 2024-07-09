@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExtractDataset.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bookReviewer</a> &gt; <a href="index.source.html" class="el_package">org</a> &gt; <span class="el_source">ExtractDataset.java</span></div><h1>ExtractDataset.java</h1><pre class="source lang-java linenums">package org;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
+
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+
+
+public class ExtractDataset {
+	
+	private HashMap&lt;String, Book&gt; books;
+	private MultiValuedMap&lt;String, Review&gt; reviews;
+	
+<span class="fc" id="L17">	public ExtractDataset() {</span>
+<span class="fc" id="L18">		books = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L19">		reviews = new ArrayListValuedHashMap&lt;&gt;();</span>
+<span class="fc" id="L20">	}</span>
+
+	private MultiValuedMap&lt;String, Review&gt; extractReviews() {
+<span class="fc" id="L23">		System.out.println(&quot;Extract Reviews...&quot;);</span>
+<span class="fc" id="L24">		MultiValuedMap&lt;String, Review&gt; map = new ArrayListValuedHashMap&lt;&gt;();</span>
+<span class="fc" id="L25">		try (BufferedReader br = new BufferedReader(new FileReader(&quot;books_rating.csv&quot;))) {</span>
+<span class="fc" id="L26">		    String line = br.readLine();</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">		    while ((line = br.readLine()) != null) {</span>
+<span class="fc" id="L28">		    	 String[] tokens = line.split(&quot;,(?=(?:[^\&quot;]*\&quot;[^\&quot;]*\&quot;)*[^\&quot;]*$)&quot;, -1);</span>
+<span class="fc" id="L29">		    	 String title = tokens[1].replace(&quot;\&quot;&quot;, &quot;&quot;);</span>
+<span class="fc" id="L30">		    	 Review review = new Review(tokens[0] , title, tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9]);</span>
+<span class="fc" id="L31">		         map.put(review.getBookId() ,review);</span>
+<span class="fc" id="L32">		    }</span>
+		}
+<span class="nc" id="L34">		catch (Exception e) {</span>
+<span class="nc" id="L35">			e.printStackTrace();</span>
+<span class="fc" id="L36">		}</span>
+<span class="fc" id="L37">		return map;</span>
+	}
+	
+	private HashMap&lt;String, Book&gt; extractBooks(){
+<span class="fc" id="L41">		System.out.println(&quot;Extract Books...&quot;);</span>
+<span class="fc" id="L42">		HashMap&lt;String, Book&gt; map = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L43">		try (BufferedReader br = new BufferedReader(new FileReader(&quot;books_data.csv&quot;))) {</span>
+<span class="fc" id="L44">		    String line = br.readLine();</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">		    while ((line = br.readLine()) != null) {</span>
+<span class="fc" id="L46">		    	 String[] tokens = line.split(&quot;,(?=(?:[^\&quot;]*\&quot;[^\&quot;]*\&quot;)*[^\&quot;]*$)&quot;, -1);</span>
+<span class="fc" id="L47">		    	 Book newBook = new Book(tokens[0] , tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9]);</span>
+<span class="fc" id="L48">		         map.put(newBook.getTitle(), newBook);</span>
+<span class="fc" id="L49">		    }</span>
+		}
+<span class="nc" id="L51">		catch (Exception e) {</span>
+<span class="nc" id="L52">			e.printStackTrace();</span>
+<span class="fc" id="L53">		}</span>
+		
+<span class="fc" id="L55">		return map;</span>
+	}
+	
+	public void extractFromDataset() {
+<span class="fc" id="L59">		books = extractBooks();</span>
+<span class="fc" id="L60">		reviews = extractReviews();</span>
+<span class="fc" id="L61">	}</span>
+	
+	public void extractFromDatasetParallel() {
+		try {
+<span class="fc" id="L65">			CompletableFuture&lt;HashMap&lt;String, Book&gt;&gt; future = CompletableFuture.supplyAsync(() -&gt; extractBooks());</span>
+<span class="fc" id="L66">			reviews = extractReviews();</span>
+<span class="fc" id="L67">			books = future.get();</span>
+<span class="fc" id="L68">			System.out.println(&quot;Books: &quot; + books.size() + &quot;\nReviews: &quot; + reviews.size());</span>
+		}
+<span class="nc" id="L70">		catch(Exception e) {</span>
+<span class="nc" id="L71">			e.printStackTrace();</span>
+<span class="fc" id="L72">		}</span>
+<span class="fc" id="L73">	}</span>
+	
+	public HashMap&lt;String, Book&gt; getBooks() {
+<span class="fc" id="L76">		return books;</span>
+	}
+	
+	public MultiValuedMap&lt;String, Review&gt; getReviews() {
+<span class="fc" id="L80">		return reviews;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
