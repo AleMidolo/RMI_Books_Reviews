@@ -1,23 +1,41 @@
-package org;
+package org.client;
 
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+import org.Author;
+import org.Book;
+import org.Review;
+import org.User;
 import org.apache.commons.collections4.MultiValuedMap;
+
+import dev.failsafe.Failsafe;
+import dev.failsafe.RetryPolicy;
+
+import org.amazon.AmazonInterface;
 
 
 public class MainClass {
 		
 	public static final String COMMA_DELIMITER = ",";
 	
+    static AmazonInterface service = new ServiceProxy();
+    private static RetryPolicy<Object> retryPolicy = RetryPolicy.builder().
+    	    handle(Exception.class).
+    	    withBackoff(1, 30, ChronoUnit.SECONDS).
+    	    withMaxRetries(3).
+    	    onRetriesExceeded(e -> 
+    	        System.out.println("Failed to connect. Max retries exceeded.")).
+    	    build();
+    
 	public static Optional<Author> extractMostReviewedAuthor(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
-		ExtractData extractor = new ExtractData(books, reviews);
-
-		HashMap<String, Author> authors = extractor.getAuthors();
-		Optional<Book> book = extractor.getMostReviewedBook();
+		
+		HashMap<String, Author> authors = service.getAuthors();
+		Optional<Book> book = service.getMostReviewedBook();
 		
 		if(book.isPresent())
 			return authors.values().stream().
@@ -29,9 +47,8 @@ public class MainClass {
 	
 	public static Optional<Author> extractMostReviewedAuthorParallel(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
 		try {
-			ExtractData extractor = new ExtractData(books, reviews);
-			CompletableFuture<HashMap<String, Author>> f = CompletableFuture.supplyAsync(() -> extractor.getAuthors());
-			Optional<Book> book = extractor.getMostReviewedBook();
+			CompletableFuture<HashMap<String, Author>> f = Failsafe.with(retryPolicy).getAsync(() -> service.getAuthors());
+			Optional<Book> book = service.getMostReviewedBook();
 			HashMap<String, Author> authors = f.get();
 			
 			if(book.isPresent())
@@ -48,9 +65,9 @@ public class MainClass {
 	}
 	
 	public static Optional<Author> extractLeastReviewedAuthor(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
-		ExtractData extractor = new ExtractData(books, reviews);
-		HashMap<String, Author> authors = extractor.getAuthors();
-		Optional<Book> leastBook = extractor.getLeastReviewedBook();
+		
+		HashMap<String, Author> authors = service.getAuthors();
+		Optional<Book> leastBook = service.getLeastReviewedBook();
 		
 		if(leastBook.isPresent())
 			return authors.values().stream().
@@ -62,9 +79,8 @@ public class MainClass {
 	
 	public static Optional<Author> extractLeastReviewedAuthorParallel(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
 		try {
-			ExtractData extractor = new ExtractData(books, reviews);
-			CompletableFuture<HashMap<String, Author> > f = CompletableFuture.supplyAsync(() -> extractor.getAuthors());
-			Optional<Book> leastBook = extractor.getLeastReviewedBook();
+			CompletableFuture<HashMap<String, Author> > f = Failsafe.with(retryPolicy).getAsync(() -> service.getAuthors());
+			Optional<Book> leastBook = service.getLeastReviewedBook();
 			HashMap<String, Author>  authors = f.get();
 			
 			if(leastBook.isPresent())
@@ -81,9 +97,8 @@ public class MainClass {
 	}
 	
 	public static Optional<Author> extractAverageReviewedAuthor(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
-		ExtractData extractor = new ExtractData(books, reviews);
-		HashMap<String, Author>  authors = extractor.getAuthors();
-		Optional<Book> averageBook = extractor.getAverageReviewedBook();
+		HashMap<String, Author>  authors = service.getAuthors();
+		Optional<Book> averageBook = service.getAverageReviewedBook();
 		
 		if(averageBook.isPresent())
 			return authors.values().stream().
@@ -95,9 +110,8 @@ public class MainClass {
 	
 	public static Optional<Author> extractAverageReviewedAuthorParallel(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
 		try {
-			ExtractData extractor = new ExtractData(books, reviews);
-			CompletableFuture<HashMap<String, Author> > f = CompletableFuture.supplyAsync(() -> extractor.getAuthors());
-			Optional<Book> averageBook = extractor.getAverageReviewedBook();
+			CompletableFuture<HashMap<String, Author> > f = Failsafe.with(retryPolicy).getAsync(() -> service.getAuthors());
+			Optional<Book> averageBook = service.getAverageReviewedBook();
 			HashMap<String, Author>  authors = f.get();
 			
 			if(averageBook.isPresent())
@@ -114,9 +128,8 @@ public class MainClass {
 	}
 	
 	public static HashMap<String, Author> getUserForAuthor(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
-		ExtractData extractor = new ExtractData(books, reviews);
-		HashMap<String, Author>  authors = extractor.getAuthors();
-		HashMap<String, User> users = extractor.getUserForAuthor();
+		HashMap<String, Author>  authors = service.getAuthors();
+		HashMap<String, User> users = service.getUserForAuthor();
 		
 		authors.values().forEach(author -> {
 			List<String> usersId = author.getBooks().stream().
@@ -134,9 +147,8 @@ public class MainClass {
 	
 	public static HashMap<String, Author> getUserForAuthorParallel(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
 		try {
-			ExtractData extractor = new ExtractData(books, reviews);
-			CompletableFuture<HashMap<String, Author>>  f = CompletableFuture.supplyAsync(() -> extractor.getAuthors());
-			HashMap<String, User> users = extractor.getUserForAuthor();
+			CompletableFuture<HashMap<String, Author>>  f = Failsafe.with(retryPolicy).getAsync(() -> service.getAuthors());
+			HashMap<String, User> users = service.getUserForAuthor();
 			HashMap<String, Author>  authors = f.get();
 			
 			authors.values().forEach(author -> {

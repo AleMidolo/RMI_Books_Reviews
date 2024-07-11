@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+import org.client.MainClass;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -81,7 +82,7 @@ public class UsersForAuthorsTest {
 					filter(usr -> usr != null).
 					filter(usr -> usr.getId().equals(uSeq.getId())).
 					findFirst();
-				if(uPar.isEmpty())
+				if(!uPar.isPresent())
 					return false;
 				
 				if(!uSeq.getNickname().equals(uPar.get().getNickname()))

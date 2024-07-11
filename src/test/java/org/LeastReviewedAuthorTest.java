@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+import org.client.MainClass;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;

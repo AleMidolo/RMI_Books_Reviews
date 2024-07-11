@@ -5,10 +5,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.Book;
 import org.ExtractDataset;
-import org.MainClass;
 import org.Review;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+import org.client.MainClass;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Level;

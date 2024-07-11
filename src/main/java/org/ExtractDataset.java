@@ -22,7 +22,7 @@ public class ExtractDataset {
 	private MultiValuedMap<String, Review> extractReviews() {
 		System.out.println("Extract Reviews...");
 		MultiValuedMap<String, Review> map = new ArrayListValuedHashMap<>();
-		try (BufferedReader br = new BufferedReader(new FileReader("books_rating.csv"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("resources/books_rating.csv"))) {
 		    String line = br.readLine();
 		    while ((line = br.readLine()) != null) {
 		    	 String[] tokens = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
@@ -40,7 +40,7 @@ public class ExtractDataset {
 	private HashMap<String, Book> extractBooks(){
 		System.out.println("Extract Books...");
 		HashMap<String, Book> map = new HashMap<>();
-		try (BufferedReader br = new BufferedReader(new FileReader("books_data.csv"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("resources/books_data.csv"))) {
 		    String line = br.readLine();
 		    while ((line = br.readLine()) != null) {
 		    	 String[] tokens = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);

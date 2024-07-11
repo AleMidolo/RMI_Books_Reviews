@@ -104,7 +104,7 @@ public class ExtractDataTest {
 							rv.getTime().equals(rSeq.getTime()) && rv.getSummary().equals(rSeq.getSummary()) && rv.getText().equals(rSeq.getText())).
 					findFirst();
 			
-			if(opt.isEmpty())
+			if(!opt.isPresent())
 				return false;
 			
 			return true;

@@ -1,5 +1,7 @@
-package org;
+package org.server;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
@@ -7,19 +9,28 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 
+import org.Author;
+import org.Book;
+import org.ExtractDataset;
+import org.Review;
+import org.User;
+import org.amazon.AmazonService;
 import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
-
-public class ExtractData {
+public class Service extends UnicastRemoteObject implements AmazonService {
 	
-	private HashMap<String, Book> books;
-	private MultiValuedMap<String, Review> reviews;
-	
-	public ExtractData(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
-		this.books = books;
-		this.reviews = reviews;
+	HashMap<String, Book> books = new HashMap<>();
+	MultiValuedMap<String, Review> reviews = new ArrayListValuedHashMap<>();
+    
+	protected Service() throws RemoteException {
+		super();
+		ExtractDataset extractor = new ExtractDataset();
+		extractor.extractFromDatasetParallel();
+		books = extractor.getBooks();
+		reviews = extractor.getReviews();
 	}
-
+	
 	public HashMap<String, Book> getBooks() {
 		return books;
 	}
@@ -27,8 +38,9 @@ public class ExtractData {
 	public MultiValuedMap<String, Review> getReviews() {
 		return reviews;
 	}
-	
-	public HashMap<String, Author> getAuthors() {
+
+	@Override
+	public HashMap<String, Author> getAuthors() throws RemoteException {
 		System.out.println("getAuthors");
 		HashMap<String, Author> authors = new HashMap<>();
 		
@@ -46,26 +58,6 @@ public class ExtractData {
 		return authors;
 	}
 	
-	public HashMap<String, User> getUserForAuthor() {
-		System.out.println("getUserForAuthor");
-		HashMap<String, User> users = new HashMap<>();
-		
-		reviews.values().forEach(r -> {
-			User user = users.get(r.getUserID());
-			
-			if(user != null)
-				user.addReview(r);
-			else {
-				User usr = new User(r.getUserID(), r.getProfileName());
-				usr.addReview(r);
-				users.put(r.getUserID(), usr);
-			}
-		});
-		
-		updateBooksReviews();
-		return users;
-	}
-	
 	public void updateBooksReviews() {
 		System.out.println("getReviewsForBook");
 		books.values().forEach(b -> b.resetReviews());
@@ -76,8 +68,9 @@ public class ExtractData {
 		});
 		books.values().forEach(b -> b.updateMediumScore());
 	}
-	
-	public Optional<Book> getMostReviewedBook() {
+
+	@Override
+	public Optional<Book> getMostReviewedBook() throws RemoteException {
 		System.out.println("getMostReviewedBook");
 		updateBooksReviews();
 		
@@ -93,9 +86,9 @@ public class ExtractData {
 		}
 		return Optional.empty();
 	}
-	
-	
-	public Optional<Book> getLeastReviewedBook() {
+
+	@Override
+	public Optional<Book> getLeastReviewedBook() throws RemoteException {
 		System.out.println("getLeastReviewedBooks");
 		updateBooksReviews();
 		OptionalInt minimum = books.values().stream().
@@ -110,8 +103,9 @@ public class ExtractData {
 		}
 		return Optional.empty();
 	}
-	
-	public Optional<Book> getAverageReviewedBook() {
+
+	@Override
+	public Optional<Book> getAverageReviewedBook() throws RemoteException {
 		System.out.println("getAverageReviewedBook");
 		updateBooksReviews();
 		OptionalDouble average = books.values().stream().
@@ -131,7 +125,28 @@ public class ExtractData {
 					findFirst();
 			return book;
 		}
-		
 		return Optional.empty();
 	}
+
+	@Override
+	public HashMap<String, User> getUserForAuthor() throws RemoteException {
+		System.out.println("getUserForAuthor");
+		HashMap<String, User> users = new HashMap<>();
+		
+		reviews.values().forEach(r -> {
+			User user = users.get(r.getUserID());
+			
+			if(user != null)
+				user.addReview(r);
+			else {
+				User usr = new User(r.getUserID(), r.getProfileName());
+				usr.addReview(r);
+				users.put(r.getUserID(), usr);
+			}
+		});
+		
+		updateBooksReviews();
+		return users;
+	}
+
 }
