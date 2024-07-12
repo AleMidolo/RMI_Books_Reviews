@@ -9,9 +9,7 @@ import java.util.stream.Collectors;
 
 import org.Author;
 import org.Book;
-import org.Review;
 import org.User;
-import org.apache.commons.collections4.MultiValuedMap;
 
 import dev.failsafe.Failsafe;
 import dev.failsafe.RetryPolicy;
@@ -32,30 +30,25 @@ public class MainClass {
     	        System.out.println("Failed to connect. Max retries exceeded.")).
     	    build();
     
-	public static Optional<Author> extractMostReviewedAuthor(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
+	public static Optional<Author> extractMostReviewedAuthor() {
 		
 		HashMap<String, Author> authors = service.getAuthors();
-		Optional<Book> book = service.getMostReviewedBook();
+		Book book = service.getMostReviewedBook();
 		
-		if(book.isPresent())
-			return authors.values().stream().
-					filter(auth -> auth.getBooks().stream().anyMatch(b -> b.getTitle().equals(book.get().getTitle()))).
-					findFirst();
-		
-		return Optional.empty();
+		return authors.values().stream().
+				filter(auth -> auth.getBooks().stream().anyMatch(b -> b.getTitle().equals(book.getTitle()))).
+				findFirst();
 	}
 	
-	public static Optional<Author> extractMostReviewedAuthorParallel(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
+	public static Optional<Author> extractMostReviewedAuthorParallel() {
 		try {
 			CompletableFuture<HashMap<String, Author>> f = Failsafe.with(retryPolicy).getAsync(() -> service.getAuthors());
-			Optional<Book> book = service.getMostReviewedBook();
+			Book book = service.getMostReviewedBook();
 			HashMap<String, Author> authors = f.get();
 			
-			if(book.isPresent())
-				return authors.values().stream().
-						filter(auth -> auth.getBooks().stream().anyMatch(b -> b.getTitle().equals(book.get().getTitle()))).
-						findFirst();
-			return Optional.empty();
+			return authors.values().stream().
+					filter(auth -> auth.getBooks().stream().anyMatch(b -> b.getTitle().equals(book.getTitle()))).
+					findFirst();
 			
 		}
 		catch(Exception e) {
@@ -64,31 +57,25 @@ public class MainClass {
 		}
 	}
 	
-	public static Optional<Author> extractLeastReviewedAuthor(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
+	public static Optional<Author> extractLeastReviewedAuthor() {
 		
 		HashMap<String, Author> authors = service.getAuthors();
-		Optional<Book> leastBook = service.getLeastReviewedBook();
+		Book leastBook = service.getLeastReviewedBook();
 		
-		if(leastBook.isPresent())
-			return authors.values().stream().
-					filter(auth -> auth.getBooks().stream().anyMatch(b -> b.getTitle().equals(leastBook.get().getTitle()))).
-					findFirst();
-		else
-			return Optional.empty();
+		return authors.values().stream().
+				filter(auth -> auth.getBooks().stream().anyMatch(b -> b.getTitle().equals(leastBook.getTitle()))).
+				findFirst();
 	}
 	
-	public static Optional<Author> extractLeastReviewedAuthorParallel(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
+	public static Optional<Author> extractLeastReviewedAuthorParallel() {
 		try {
 			CompletableFuture<HashMap<String, Author> > f = Failsafe.with(retryPolicy).getAsync(() -> service.getAuthors());
-			Optional<Book> leastBook = service.getLeastReviewedBook();
+			Book leastBook = service.getLeastReviewedBook();
 			HashMap<String, Author>  authors = f.get();
 			
-			if(leastBook.isPresent())
-				return authors.values().stream().
-						filter(auth -> auth.getBooks().stream().anyMatch(b -> b.getTitle().equals(leastBook.get().getTitle()))).
-						findFirst();
-			else
-				return Optional.empty();
+			return authors.values().stream().
+					filter(auth -> auth.getBooks().stream().anyMatch(b -> b.getTitle().equals(leastBook.getTitle()))).
+					findFirst();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -96,30 +83,24 @@ public class MainClass {
 		}
 	}
 	
-	public static Optional<Author> extractAverageReviewedAuthor(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
+	public static Optional<Author> extractAverageReviewedAuthor() {
 		HashMap<String, Author>  authors = service.getAuthors();
-		Optional<Book> averageBook = service.getAverageReviewedBook();
+		Book averageBook = service.getAverageReviewedBook();
 		
-		if(averageBook.isPresent())
-			return authors.values().stream().
-					filter(auth -> auth.getBooks().stream().anyMatch(b -> b.getTitle().equals(averageBook.get().getTitle()))).
-					findFirst();
-		else
-			return Optional.empty();
+		return authors.values().stream().
+				filter(auth -> auth.getBooks().stream().anyMatch(b -> b.getTitle().equals(averageBook.getTitle()))).
+				findFirst();
 	}
 	
-	public static Optional<Author> extractAverageReviewedAuthorParallel(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
+	public static Optional<Author> extractAverageReviewedAuthorParallel() {
 		try {
 			CompletableFuture<HashMap<String, Author> > f = Failsafe.with(retryPolicy).getAsync(() -> service.getAuthors());
-			Optional<Book> averageBook = service.getAverageReviewedBook();
+			Book averageBook = service.getAverageReviewedBook();
 			HashMap<String, Author>  authors = f.get();
 			
-			if(averageBook.isPresent())
-				return authors.values().stream().
-						filter(auth -> auth.getBooks().stream().anyMatch(b -> b.getTitle().equals(averageBook.get().getTitle()))).
-						findFirst();
-			else
-				return Optional.empty();
+			return authors.values().stream().
+					filter(auth -> auth.getBooks().stream().anyMatch(b -> b.getTitle().equals(averageBook.getTitle()))).
+					findFirst();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -127,7 +108,7 @@ public class MainClass {
 		}
 	}
 	
-	public static HashMap<String, Author> getUserForAuthor(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
+	public static HashMap<String, Author> getUserForAuthor() {
 		HashMap<String, Author>  authors = service.getAuthors();
 		HashMap<String, User> users = service.getUserForAuthor();
 		
@@ -145,7 +126,7 @@ public class MainClass {
 		return authors;
 	}
 	
-	public static HashMap<String, Author> getUserForAuthorParallel(HashMap<String, Book> books, MultiValuedMap<String, Review> reviews) {
+	public static HashMap<String, Author> getUserForAuthorParallel() {
 		try {
 			CompletableFuture<HashMap<String, Author>>  f = Failsafe.with(retryPolicy).getAsync(() -> service.getAuthors());
 			HashMap<String, User> users = service.getUserForAuthor();

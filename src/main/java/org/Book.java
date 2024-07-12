@@ -1,10 +1,12 @@
 package org;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Book {
+public class Book implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private String title;
 	private String description;
 	private String authors;
@@ -17,6 +19,21 @@ public class Book {
 	private String ratingCount;
 	private List<Review> reviews;
 	private double mediumScore;
+	
+	public Book() {
+		this.title = "";
+		this.description = "";
+		this.authors = "";
+		this.image = "";
+		this.previewLink = "";
+		this.publisher = "";
+		this.publishedDate = "";
+		this.infoLink = "";
+		this.categories = "";
+		this.ratingCount = "";
+		reviews = new ArrayList<>();
+		mediumScore = 0.0;
+	}
 	
 	public Book(String title, String description, String authors, String image, String previewLink, String publisher, String publishedDate, String infoLink, String categories, String ratingCount) {
 		this.title = title;

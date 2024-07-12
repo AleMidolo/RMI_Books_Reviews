@@ -1,7 +1,6 @@
 package org.amazon;
 import java.rmi.*;
 import java.util.HashMap;
-import java.util.Optional;
 
 import org.Author;
 import org.Book;
@@ -11,11 +10,11 @@ public interface AmazonService extends Remote{
 
     HashMap<String, Author> getAuthors() throws RemoteException;
 
-    Optional<Book> getMostReviewedBook() throws RemoteException;
+    Book getMostReviewedBook() throws RemoteException;
 
-    Optional<Book> getLeastReviewedBook() throws RemoteException;
+    Book getLeastReviewedBook() throws RemoteException;
 
-    Optional<Book> getAverageReviewedBook() throws RemoteException;
+    Book getAverageReviewedBook() throws RemoteException;
 
     HashMap<String, User> getUserForAuthor() throws RemoteException;
 }

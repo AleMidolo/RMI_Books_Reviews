@@ -26,8 +26,8 @@ public class LeastReviewedAuthorTest {
 		ed.extractFromDatasetParallel();
 		books = ed.getBooks();
 		reviews = ed.getReviews();
-		authorSeq = MainClass.extractLeastReviewedAuthor(books, reviews);
-		authorPar = MainClass.extractLeastReviewedAuthorParallel(books, reviews);
+		authorSeq = MainClass.extractLeastReviewedAuthor();
+		authorPar = MainClass.extractLeastReviewedAuthorParallel();
 	}
 	
 	@Test

@@ -1,63 +1,26 @@
 package org.benchmark;
 
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-import org.Book;
-import org.ExtractDataset;
-import org.Review;
-import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.client.MainClass;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.Fork;
-import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Measurement;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
 
 public class UsersForAuthorsBenchmark {
 	
-	@State(Scope.Benchmark)
-    public static class MyState {
+	public static void main(String[] args) {
 
-		HashMap<String, Book> books = new HashMap<>();
-		MultiValuedMap<String, Review> reviews = new ArrayListValuedHashMap<>();
-
-		@Setup(Level.Trial)
-		public void setUp() {
-			System.out.println("\nSetUp");
-			ExtractDataset ed = new ExtractDataset();
-			ed.extractFromDatasetParallel();
-			books = ed.getBooks();
-			reviews = ed.getReviews();
+		for(int i=0; i<10; i++) {
+			long startTime = System.nanoTime();
+			MainClass.getUserForAuthor();
+			long stopTime = System.nanoTime();
+			System.out.println("getUserForAuthor: " + TimeUnit.MILLISECONDS.convert((stopTime - startTime), TimeUnit.NANOSECONDS));
 		}
-    }
+		System.out.println();
 
-	@Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.MILLISECONDS)
-	@Fork(value=1, warmups=1)
-	@Measurement(time=1, timeUnit = TimeUnit.MILLISECONDS)
-	@OutputTimeUnit(TimeUnit.MILLISECONDS)
-	@Benchmark
-    public static void UserForAuthorSequential(MyState mystate) {
-		long startTime = System.nanoTime();
-		MainClass.getUserForAuthor(mystate.books, mystate.reviews);
-		long stopTime = System.nanoTime();
-		System.out.println("Total Time: " + TimeUnit.MILLISECONDS.convert((stopTime - startTime), TimeUnit.NANOSECONDS));
-	}
-	
-	@Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.MILLISECONDS)
-	@Fork(value=1, warmups=1)
-	@Measurement(time=1, timeUnit = TimeUnit.MILLISECONDS)
-	@OutputTimeUnit(TimeUnit.MILLISECONDS)
-	@Benchmark
-    public static void UserForAuthorParallel(MyState mystate) {
-		long startTime = System.nanoTime();
-		MainClass.getUserForAuthorParallel(mystate.books, mystate.reviews);
-		long stopTime = System.nanoTime();
-		System.out.println("Total Time: " + TimeUnit.MILLISECONDS.convert((stopTime - startTime), TimeUnit.NANOSECONDS));
+		for(int i=0; i<10; i++) {
+			long startTime = System.nanoTime();
+			MainClass.getUserForAuthorParallel();
+			long stopTime = System.nanoTime();
+			System.out.println("getUserForAuthorParallel: " + TimeUnit.MILLISECONDS.convert((stopTime - startTime), TimeUnit.NANOSECONDS));
+		}
 	}
 }

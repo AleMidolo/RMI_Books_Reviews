@@ -1,11 +1,13 @@
 package org;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class Author {
+public class Author implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private String fullName;
 	private List<Book> books;
 	private HashSet<User> users;

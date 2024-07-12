@@ -20,6 +20,7 @@ import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 public class Service extends UnicastRemoteObject implements AmazonService {
 	
+	private static final long serialVersionUID = 1L;
 	HashMap<String, Book> books = new HashMap<>();
 	MultiValuedMap<String, Review> reviews = new ArrayListValuedHashMap<>();
     
@@ -70,7 +71,7 @@ public class Service extends UnicastRemoteObject implements AmazonService {
 	}
 
 	@Override
-	public Optional<Book> getMostReviewedBook() throws RemoteException {
+	public Book getMostReviewedBook() throws RemoteException {
 		System.out.println("getMostReviewedBook");
 		updateBooksReviews();
 		
@@ -82,13 +83,14 @@ public class Service extends UnicastRemoteObject implements AmazonService {
 			Optional<Book> book = books.values().stream().
 					filter(e -> e.getReviews().size() == maximum.getAsInt()).
 					findFirst();
-			return book;
+			if(book.isPresent())
+				return book.get();
 		}
-		return Optional.empty();
+		return new Book();
 	}
 
 	@Override
-	public Optional<Book> getLeastReviewedBook() throws RemoteException {
+	public Book getLeastReviewedBook() throws RemoteException {
 		System.out.println("getLeastReviewedBooks");
 		updateBooksReviews();
 		OptionalInt minimum = books.values().stream().
@@ -99,13 +101,14 @@ public class Service extends UnicastRemoteObject implements AmazonService {
 			Optional<Book> book = books.values().stream().
 					filter(b -> b.getReviews().size() == minimum.getAsInt()).
 					findFirst();
-			return book;
+			if(book.isPresent())
+				return book.get();
 		}
-		return Optional.empty();
+		return new Book();
 	}
 
 	@Override
-	public Optional<Book> getAverageReviewedBook() throws RemoteException {
+	public Book getAverageReviewedBook() throws RemoteException {
 		System.out.println("getAverageReviewedBook");
 		updateBooksReviews();
 		OptionalDouble average = books.values().stream().
@@ -123,9 +126,10 @@ public class Service extends UnicastRemoteObject implements AmazonService {
 			Optional<Book> book = books.values().stream().
 					filter(b -> b.getReviews().size() == val).
 					findFirst();
-			return book;
+			if(book.isPresent())
+				return book.get();
 		}
-		return Optional.empty();
+		return new Book();
 	}
 
 	@Override

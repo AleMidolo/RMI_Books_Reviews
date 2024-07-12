@@ -26,8 +26,8 @@ public class AverageReviewedAuthorTest {
 		ed.extractFromDatasetParallel();
 		books = ed.getBooks();
 		reviews = ed.getReviews();
-		authorSeq = MainClass.extractAverageReviewedAuthor(books, reviews);
-		authorPar = MainClass.extractAverageReviewedAuthorParallel(books, reviews);
+		authorSeq = MainClass.extractAverageReviewedAuthor();
+		authorPar = MainClass.extractAverageReviewedAuthorParallel();
 	}
 	
 	@Test

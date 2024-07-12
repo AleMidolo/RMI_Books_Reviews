@@ -26,8 +26,8 @@ public class MostReviewedAuthorTest {
 		ed.extractFromDatasetParallel();
 		books = ed.getBooks();
 		reviews = ed.getReviews();
-		authorSeq = MainClass.extractMostReviewedAuthor(books, reviews);
-		authorPar = MainClass.extractMostReviewedAuthorParallel(books, reviews);
+		authorSeq = MainClass.extractMostReviewedAuthor();
+		authorPar = MainClass.extractMostReviewedAuthorParallel();
 	}
 	
 	@Test

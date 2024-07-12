@@ -28,8 +28,8 @@ public class UsersForAuthorsTest {
 		ed.extractFromDatasetParallel();
 		books = ed.getBooks();
 		reviews = ed.getReviews();
-		authorsSeq = MainClass.getUserForAuthor(books, reviews);
-		authorsPar = MainClass.getUserForAuthorParallel(books, reviews);
+		authorsSeq = MainClass.getUserForAuthor();
+		authorsPar = MainClass.getUserForAuthorParallel();
 	}
 	
 	@Test

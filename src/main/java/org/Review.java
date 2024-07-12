@@ -1,7 +1,10 @@
 package org;
 
-public class Review {
+import java.io.Serializable;
+
+public class Review implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	public String bookID;
 	public String title;
 	public String price;
