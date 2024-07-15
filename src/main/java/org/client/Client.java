@@ -42,7 +42,7 @@ public class Client {
 	public static Optional<Author> extractMostReviewedAuthorParallel() {
 		try {
 			CompletableFuture<HashMap<String, Author>> f = Failsafe.with(retryPolicy).getAsync(() -> service.getAuthors());
-			Book book = service.getMostReviewedBook();
+			Book book = Failsafe.with(retryPolicy).get(() -> service.getMostReviewedBook());
 			HashMap<String, Author> authors = f.get();
 			
 			return authors.values().stream().
@@ -69,7 +69,7 @@ public class Client {
 	public static Optional<Author> extractLeastReviewedAuthorParallel() {
 		try {
 			CompletableFuture<HashMap<String, Author> > f = Failsafe.with(retryPolicy).getAsync(() -> service.getAuthors());
-			Book leastBook = service.getLeastReviewedBook();
+			Book leastBook = Failsafe.with(retryPolicy).get(() -> service.getLeastReviewedBook());
 			HashMap<String, Author>  authors = f.get();
 			
 			return authors.values().stream().
@@ -94,7 +94,7 @@ public class Client {
 	public static Optional<Author> extractAverageReviewedAuthorParallel() {
 		try {
 			CompletableFuture<HashMap<String, Author> > f = Failsafe.with(retryPolicy).getAsync(() -> service.getAuthors());
-			Book averageBook = service.getAverageReviewedBook();
+			Book averageBook = Failsafe.with(retryPolicy).get(() -> service.getAverageReviewedBook());
 			HashMap<String, Author>  authors = f.get();
 			
 			return authors.values().stream().
@@ -128,7 +128,7 @@ public class Client {
 	public static HashMap<String, Author> getUserForAuthorParallel() {
 		try {
 			CompletableFuture<HashMap<String, Author>>  f = Failsafe.with(retryPolicy).getAsync(() -> service.getAuthors());
-			HashMap<String, User> users = service.getUserForAuthor();
+			HashMap<String, User> users = Failsafe.with(retryPolicy).get(() -> service.getUserForAuthor());
 			HashMap<String, Author>  authors = f.get();
 			
 			authors.values().forEach(author -> {
