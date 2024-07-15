@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
-import org.client.MainClass;
+import org.client.Client;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -28,8 +28,8 @@ public class UsersForAuthorsTest {
 		ed.extractFromDatasetParallel();
 		books = ed.getBooks();
 		reviews = ed.getReviews();
-		authorsSeq = MainClass.getUserForAuthor();
-		authorsPar = MainClass.getUserForAuthorParallel();
+		authorsSeq = Client.getUserForAuthor();
+		authorsPar = Client.getUserForAuthorParallel();
 	}
 	
 	@Test

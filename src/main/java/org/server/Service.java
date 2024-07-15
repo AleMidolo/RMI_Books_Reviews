@@ -21,12 +21,16 @@ import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 public class Service extends UnicastRemoteObject implements AmazonService {
 	
 	private static final long serialVersionUID = 1L;
-	HashMap<String, Book> books = new HashMap<>();
-	MultiValuedMap<String, Review> reviews = new ArrayListValuedHashMap<>();
+	HashMap<String, Book> books;
+	MultiValuedMap<String, Review> reviews;
+	ExtractDataset extractor;
     
 	protected Service() throws RemoteException {
 		super();
-		ExtractDataset extractor = new ExtractDataset();
+		books = new HashMap<>();
+		reviews = new ArrayListValuedHashMap<>();
+		
+		extractor = new ExtractDataset();
 		extractor.extractFromDatasetParallel();
 		books = extractor.getBooks();
 		reviews = extractor.getReviews();

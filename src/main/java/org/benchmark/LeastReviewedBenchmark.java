@@ -2,7 +2,7 @@ package org.benchmark;
 
 import java.util.concurrent.TimeUnit;
 
-import org.client.MainClass;
+import org.client.Client;
 
 public class LeastReviewedBenchmark {
 	
@@ -10,7 +10,7 @@ public class LeastReviewedBenchmark {
 
 		for(int i=0; i<10; i++) {
 			long startTime = System.nanoTime();
-			MainClass.extractLeastReviewedAuthor();
+			Client.extractLeastReviewedAuthor();
 			long stopTime = System.nanoTime();
 			System.out.println("extractLeastReviewedAuthor: " + TimeUnit.MILLISECONDS.convert((stopTime - startTime), TimeUnit.NANOSECONDS));
 		}
@@ -18,7 +18,7 @@ public class LeastReviewedBenchmark {
 
 		for(int i=0; i<10; i++) {
 			long startTime = System.nanoTime();
-			MainClass.extractLeastReviewedAuthorParallel();
+			Client.extractLeastReviewedAuthorParallel();
 			long stopTime = System.nanoTime();
 			System.out.println("extractLeastReviewedAuthorParallel: " + TimeUnit.MILLISECONDS.convert((stopTime - startTime), TimeUnit.NANOSECONDS));
 		}

@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
-import org.client.MainClass;
+import org.client.Client;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -26,8 +26,8 @@ public class LeastReviewedAuthorTest {
 		ed.extractFromDatasetParallel();
 		books = ed.getBooks();
 		reviews = ed.getReviews();
-		authorSeq = MainClass.extractLeastReviewedAuthor();
-		authorPar = MainClass.extractLeastReviewedAuthorParallel();
+		authorSeq = Client.extractLeastReviewedAuthor();
+		authorPar = Client.extractLeastReviewedAuthorParallel();
 	}
 	
 	@Test

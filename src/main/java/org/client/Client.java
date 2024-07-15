@@ -17,11 +17,10 @@ import dev.failsafe.RetryPolicy;
 import org.amazon.AmazonInterface;
 
 
-public class MainClass {
-		
-	public static final String COMMA_DELIMITER = ",";
+public class Client {
 	
-    static AmazonInterface service = new ServiceProxy();
+    private static AmazonInterface service = new ServiceProxy();
+
     private static RetryPolicy<Object> retryPolicy = RetryPolicy.builder().
     	    handle(Exception.class).
     	    withBackoff(1, 30, ChronoUnit.SECONDS).
