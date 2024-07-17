@@ -14,11 +14,11 @@ import org.Book;
 import org.ExtractDataset;
 import org.Review;
 import org.User;
-import org.amazon.AmazonService;
+import org.data.DataService;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
-public class Service extends UnicastRemoteObject implements AmazonService {
+public class Service extends UnicastRemoteObject implements DataService {
 	
 	private static final long serialVersionUID = 1L;
 	HashMap<String, Book> books;

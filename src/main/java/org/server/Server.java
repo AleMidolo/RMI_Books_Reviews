@@ -4,12 +4,12 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
-import org.amazon.AmazonService;
+import org.data.DataService;
 
 public class Server {
 
 	//changed
-    private static AmazonService service;
+    private static DataService service;
 
 
     public static void main(String [] args) throws RemoteException {

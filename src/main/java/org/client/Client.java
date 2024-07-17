@@ -14,12 +14,12 @@ import org.User;
 import dev.failsafe.Failsafe;
 import dev.failsafe.RetryPolicy;
 
-import org.amazon.AmazonInterface;
+import org.data.DataInterface;
 
 
 public class Client {
 	
-    private static AmazonInterface service = new ServiceProxy();
+    private static DataInterface service = new ServiceProxy();
 
     private static RetryPolicy<Object> retryPolicy = RetryPolicy.builder().
     	    handle(Exception.class).

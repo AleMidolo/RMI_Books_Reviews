@@ -9,19 +9,19 @@ import java.util.HashMap;
 import org.Author;
 import org.Book;
 import org.User;
-import org.amazon.AmazonInterface;
-import org.amazon.AmazonService;
+import org.data.DataInterface;
+import org.data.DataService;
 
-public class ServiceProxy implements AmazonInterface {
+public class ServiceProxy implements DataInterface {
 
     private final String serviceNameRemote = "rmi://127.0.0.1:1099/Server";
-    private AmazonService service;
+    private DataService service;
 
     public ServiceProxy(){
         System.out.println("PROXY CONSTUCTOR");
         try{
             TimeUnit.SECONDS.sleep(5);
-            service = (AmazonService) Naming.lookup(serviceNameRemote);
+            service = (DataService) Naming.lookup(serviceNameRemote);
         }
         catch (RemoteException | MalformedURLException | NotBoundException | InterruptedException e){
             System.err.println(e);
