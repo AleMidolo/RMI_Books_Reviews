@@ -1,6 +1,4 @@
-# Automatically Injecting Robustness Statements into Distributed
-Applications
-
+# Automatically Injecting Robustness Statements into Distributed Applications
 ## Abstract
 When developing a distributed application, several issues need to be handled and software components should include some mechanisms to make their execution resilient when network faults, delays, or tampering occur. 
 E.g. synchronous calls represent a too tight connection between a client requesting a service and the service itself, whereby potential network delays or temporary server overloads would keep the client-side hanging, exposing it to a domino effect. 
