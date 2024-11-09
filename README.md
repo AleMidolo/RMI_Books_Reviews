@@ -13,7 +13,10 @@ The following figure illustrates the three main phases of the proposed approach:
 
 ## Server - Client Architecture
 Following figures show the UML class diagrams outlining the application's components.
-The DataService remote interface defines five methods: getAuthors(), getMostReviewedBook(), getLeastReviewedBook(), getAverageReviewedBook(), and getAverageReviewedBook(). The Server class creates and configures an instance of Service, which implements the DataService interface and uses the methods of the ExtractDataset class to retrieve information from the books dataset. On the client side, the ServiceProxy class implements DataService and manages network communication, performing RMIs on the methods exposed by Service. The Client class creates a ServiceProxy object to connect to the service and receive the results of remote method executions.
+The DataService remote interface defines five methods: getAuthors(), getMostReviewedBook(), getLeastReviewedBook(), getAverageReviewedBook(), and getAverageReviewedBook(). The Server class creates and configures an instance of Service, which implements the DataService interface and uses the methods of the ExtractDataset class to retrieve information from the books dataset.
 
 ![The UML class diagram of the server side architecture.](https://github.com/user-attachments/assets/7e5d2c76-48cb-4daf-bfd6-eeef8660ac47)
+
+On the client side, the ServiceProxy class implements DataService and manages network communication, performing RMIs on the methods exposed by Service. The Client class creates a ServiceProxy object to connect to the service and receive the results of remote method executions.
+
 ![The UML class diagram of the client side architecture.](https://github.com/user-attachments/assets/46b3da95-a5b3-4663-9f67-2c90fc84ec8d)
