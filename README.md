@@ -20,3 +20,19 @@ The DataService remote interface defines five methods: getAuthors(), getMostRevi
 On the client side, the ServiceProxy class implements DataService and manages network communication, performing RMIs on the methods exposed by Service. The Client class creates a ServiceProxy object to connect to the service and receive the results of remote method executions.
 
 ![The UML class diagram of the client side architecture.](https://github.com/user-attachments/assets/46b3da95-a5b3-4663-9f67-2c90fc84ec8d)
+
+## Citation
+Marletta, D.; Midolo, A.; Tramontana, E. Automatically Injecting Robustness Statements into Distributed Applications. Future Internet 2024, 16, 416. https://doi.org/10.3390/fi16110416
+
+@Article{fi16110416,
+	AUTHOR = {Marletta, Daniele and Midolo, Alessandro and Tramontana, Emiliano},
+	TITLE = {Automatically Injecting Robustness Statements into Distributed Applications},
+	JOURNAL = {Future Internet},
+	VOLUME = {16},
+	YEAR = {2024},
+	NUMBER = {11},
+	ARTICLE-NUMBER = {416},
+	URL = {https://www.mdpi.com/1999-5903/16/11/416},
+	ISSN = {1999-5903},
+	DOI = {10.3390/fi16110416}
+}
