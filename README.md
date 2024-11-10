@@ -23,7 +23,7 @@ On the client side, the ServiceProxy class implements DataService and manages ne
 
 ## Citation
 Marletta, D.; Midolo, A.; Tramontana, E. Automatically Injecting Robustness Statements into Distributed Applications. Future Internet 2024, 16, 416. https://doi.org/10.3390/fi16110416
-'''
+```
 @Article{fi16110416,
 	AUTHOR = {Marletta, Daniele and Midolo, Alessandro and Tramontana, Emiliano},
 	TITLE = {Automatically Injecting Robustness Statements into Distributed Applications},
@@ -36,4 +36,4 @@ Marletta, D.; Midolo, A.; Tramontana, E. Automatically Injecting Robustness Stat
 	ISSN = {1999-5903},
 	DOI = {10.3390/fi16110416}
 }
-'''
+```
